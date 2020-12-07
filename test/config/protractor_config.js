@@ -1,9 +1,10 @@
 const path = require('path')
+const { browser } = require('protractor')
 
 exports.config = {
   allScriptsTimeout: 60000,
   getPageTimeout: 60000,
-  specs: [path.resolve('./test/features/*.feature')],
+  specs: [path.resolve('./test/features/**/*.feature')],
   framework: 'custom',
   frameworkPath: require.resolve('protractor-cucumber-framework'),
   capabilities: {
@@ -17,7 +18,10 @@ exports.config = {
   cucumberOpts: {
     require: [path.resolve('./test/step_definitions/**/*.js')],
     ignoreUncaughtExceptions: true,
-    format: ['json:./reports/report.json'],
+    format: ['json:./test/reports/report.json'],
     tags: '@smoke'
+  },
+  onPrepare: () => {
+    return browser.waitForAngularEnabled(false)
   }
 }
