@@ -2,6 +2,6 @@
 Feature: Home Page Title
 
 Scenario: Page title
-  Given I open epam.com
+  Given I open "https://www.epam.com/" url
   Then Page title should be "EPAM | Enterprise Software Development, Design & Consulting"
   When I wait 10 seconds
