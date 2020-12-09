@@ -1,5 +1,14 @@
 const path = require('path')
-const { browser } = require('protractor')
+// const { browser } = require('protractor')
+const yargs = require('yargs').argv
+const reporter = require('cucumber-html-reporter')
+
+const reportOptions = {
+  theme: 'bootstrap',
+  jsonFile: path.join(__dirname, '../reports/report.json'),
+  output: path.join(__dirname, '../reports/cucumber-report.html'),
+  reportSuitsAsScenarios: true
+}
 
 exports.config = {
   allScriptsTimeout: 60000,
@@ -18,10 +27,13 @@ exports.config = {
   cucumberOpts: {
     require: [path.resolve('./test/step_definitions/**/*.js')],
     ignoreUncaughtExceptions: true,
-    format: ['json:./test/reports/report.json'],
-    tags: '@smoke'
+    format: ['json:./test/reports/report.json', './node_modules/cucumber-pretty'],
+    tags: yargs.tags || '@smoke'
   },
   onPrepare: () => {
     return browser.waitForAngularEnabled(false)
+  },
+  afterLaunch: () => {
+    return reporter.generate(reporterOptions)
   }
 }
